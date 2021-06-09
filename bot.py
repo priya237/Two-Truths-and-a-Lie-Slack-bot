@@ -30,28 +30,31 @@ def welcome_message(payload):
     client.chat_postEphemeral(channel="#test",user=user_id, text="Hey there,:wave:\n I noticed you joined #twotruth. I'm here to help your teammates get to know each other better by playing two truth and a lie. \n While you're here, you can help out by filling out your truth and lies :smile:\n\nWould you like to play game?",
 			attachments=[{
 			"text": "",
-			"callback_id":"coffee_order_form",
+			"callback_id":"truth_lie_form",
 			"color": "#3AA3E3",
 			"attachment_type": "default",
 			"actions": [{
-				"name": "coffee_order",
+				"name": "truth_and_lie_choice1",
 				"text": "Add My Truth And Lie",
 				"type": "button",
 				"value": "Add My Truth And Lie",
 				"action_id": "actionId-0"
 			},{
-				"name": "coffee_order",
+				"name": "truth_and_lie_choice2",
 				"text": "No Thanks",
 				"type": "button",
 				"value": "No Thanks",
 				"action_id": "actionId-1"
 			}]
 			}])
+    # response_to_user(payload)
     print(payload)
-	
-		
+
+       
+
+
 def broadcast(payload):
-	if payload["type"]== "view_submission" and payload["view"]["callback_id"] == "coffee_order_form":
+	if payload["type"]== "view_submission" and payload["view"]["callback_id"] == "truth_lie_form":
 		userid=payload["user"]["name"]
 		print("user id is", userid)
 		payload1=payload["view"]["state"]["values"]
@@ -66,19 +69,19 @@ def broadcast(payload):
 			"color": "#3AA3E3",
 			"attachment_type": "default",
 			"actions": [{
-				"name": "coffee_order",
+				"name": "truth_and_lie_choice",
 				"text": "1",
 				"type": "button",
 				"value": "1",
 				"action_id": "actionId-0"
 			},{
-				"name": "coffee_order",
+				"name": "truth_and_lie_choice",
 				"text": "2",
 				"type": "button",
 				"value": "2",
 				"action_id": "actionId-1"
 			},{
-				"name": "coffee_order",
+				"name": "truth_and_lie_choice",
 				"text": "3",
 				"type": "button",
 				"value": "3",
@@ -93,10 +96,15 @@ def broadcast(payload):
 
 
 def response_to_user(payload):
-	if payload["type"]== "view_submission" and payload["view"]["callback_id"] == "coffee_order_form":
+	if payload["type"]== "view_submission" and payload["view"]["callback_id"] == "truth_lie_form":
 		payload1=payload["view"]["state"]["values"]
 		global lie
 		lie= payload1["truth_lie3"]["Lie"]["value"]
+	
+	# if payload['type'] == 'event_callback' and payload['event']['type'] == 'member_joined_channel':
+	# 	global new_user
+	# 	new_user=payload['event']['user']
+	
 
 	print("in second loop\n\n\n ",lie)
 	if payload['type'] == "interactive_message" and payload['callback_id'] == 'response_from_user':
@@ -123,7 +131,7 @@ def truth_and_lie():
 			trigger_id = payload['trigger_id'],
 			view = {
 				"type": "modal",
-				"callback_id":"coffee_order_form",
+				"callback_id":"truth_lie_form",
 				"title": {
 					"type": "plain_text",
 					"text": "Two Truth and Lie",
@@ -187,7 +195,7 @@ def truth_and_lie():
 		user_id=payload['user']['id']
 		channel_id= payload['channel']['id']
 		client.chat_postEphemeral(channel=channel_id,user=user_id,text="Okay! Have a nice Journey ahead.")
-	if payload["type"]== "view_submission" and payload["view"]["callback_id"] == "coffee_order_form":
+	if payload["type"]== "view_submission" and payload["view"]["callback_id"] == "truth_lie_form":
 		payload1=payload["view"]["state"]["values"]
 		global lie
 		lie= payload1["truth_lie3"]["Lie"]["value"]
